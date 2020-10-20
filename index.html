@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Responsive ecommerce Landing</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lykmapipo/themify-icons@0.1.2/css/themify-icons.css">
+    <!-- CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/flickity@2/dist/flickity.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<style>
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    ._urtaav-modal {
+        font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+    }
+
+    ._urtaav-modal__overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+    }
+
+    ._urtaav-modal__container {
+        background-color: #fff;
+        padding: 1rem;
+        width: 60%;
+        max-width: 80vw;
+        /* height: 50vh; */
+        max-height: 100vh;
+        border-radius: 4px;
+        overflow-y: auto;
+        box-sizing: border-box;
+    }
+
+    ._urtaav-modal__header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    ._urtaav-modal-header-close {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        width: 100%;
+        /* height: 10px; */
+        padding: .5rem;
+    }
+
+    ._urtaav-modal__title {
+        margin-top: 0;
+        margin-bottom: 0;
+        font-weight: 600;
+        font-size: 1.25rem;
+        line-height: 1.25;
+        color: #00449e;
+        box-sizing: border-box;
+    }
+
+    ._urtaav-modal__close {
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+    }
+
+    ._urtaav-modal__header ._urtaav-modal__close:before {
+        content: "\2715";
+    }
+
+    ._urtaav-modal__content {
+        display: flex;
+        margin-top: .7rem;
+    }
+
+    ._urtaav-modal__content ._flex-row {
+        display: flex;
+        flex-flow: column wrap;
+    }
+
+    ._urtaav-modal__content ._flex-row ._flex-item {
+        width: 100%;
+        margin: auto;
+        padding: .7rem;
+        height: inherit;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .flex-img {
+        height: auto;
+    }
+
+
+    ._urtaav-modal__content ._flex-row ._flex-item:nth-child(2) {
+        margin: auto;
+        text-align: justify;
+    }
+
+    ._urtaav-modal__container ._urtaav-modal__footer {
+        margin-top: 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    ._urtaav-modal__btn {
+        font-size: .875rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+        background-color: #e6e6e6;
+        color: rgba(0, 0, 0, .8);
+        border-radius: .25rem;
+        border-style: none;
+        border-width: 0;
+        cursor: pointer;
+        -webkit-appearance: button;
+        text-transform: none;
+        overflow: visible;
+        line-height: 1.15;
+        margin: .7rem;
+        will-change: transform;
+        -moz-osx-font-smoothing: grayscale;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        transition: -webkit-transform .25s ease-out;
+        transition: transform .25s ease-out;
+        transition: transform .25s ease-out, -webkit-transform .25s ease-out;
+    }
+
+    ._urtaav-modal__btn:focus,
+    ._urtaav-modal__btn:hover {
+        -webkit-transform: scale(1.05);
+        transform: scale(1.05);
+    }
+
+    ._urtaav-modal__btn-primary {
+        background-color: #00449e;
+        color: #fff;
+    }
+
+
+
+
+    /**************************\
+  Demo Animation Style
+\**************************/
+    @keyframes mmfadeIn {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes mmfadeOut {
+        from {
+            opacity: 1;
+        }
+
+        to {
+            opacity: 0;
+        }
+    }
+
+    @keyframes mmslideIn {
+        from {
+            transform: translateY(15%);
+        }
+
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes mmslideOut {
+        from {
+            transform: translateY(0);
+        }
+
+        to {
+            transform: translateY(-10%);
+        }
+    }
+
+    .micromodal-slide {
+        display: none;
+    }
+
+    .micromodal-slide.is-open {
+        display: block;
+    }
+
+    ._urtaav-modal-active {
+        overflow: hidden;
+    }
+
+
+    .micromodal-slide[aria-hidden="false"] ._urtaav-modal__overlay {
+        animation: mmfadeIn 1s cubic-bezier(0.0, 0.0, 0.2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="false"] ._urtaav-modal__container {
+        animation: mmslideIn 1.3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="true"] ._urtaav-modal__overlay {
+        animation: mmfadeOut 1s cubic-bezier(0.0, 0.0, 0.2, 1);
+    }
+
+    .micromodal-slide[aria-hidden="true"] ._urtaav-modal__container {
+        animation: mmslideOut 1.3s cubic-bezier(0, 0, .2, 1);
+    }
+
+    .micromodal-slide ._urtaav-modal__container,
+    .micromodal-slide ._urtaav-modal__overlay {
+        will-change: transform;
+    }
+
+    /* // Small devices (landscape phones, 576px and up) */
+    @media (min-width: 576px) {}
+
+    /* // Medium devices (tablets, 768px and up) */
+    @media (min-width: 768px) {
+      
+        ._urtaav-modal__container{
+            height: 56vh;
+        }
+        ._urtaav-modal__content ._flex-row {
+            flex-flow: row wrap;
+            height: 200px;
+        }
+
+        ._urtaav-modal__content ._flex-row ._flex-item:nth-child(1) {
+            width: 40%;
+            padding: 0;
+
+        }
+
+        ._urtaav-modal__content ._flex-row ._flex-item .flex-img {
+            height: 100%;
+        }
+
+        ._urtaav-modal__content ._flex-row ._flex-item:nth-child(2) {
+            width: 60%;
+        }
+
+        ._urtaav-modal__container ._urtaav-modal__footer {
+            margin-top: 0;
+            justify-content: flex-end;
+        }
+    }
+
+    /* // Large devices (desktops, 992px and up) */
+    @media (min-width: 992px) {
+ 
+    }
+
+    /* // Extra large devices (large desktops, 1200px and up) */
+    @media (min-width: 1200px) {
+
+    }
+</style>
+
+<body>
+    <div class="_urtaav-modal micromodal-slide" id="modal-1" aria-hidden="false">
+        <div class="_urtaav-modal__overlay" tabindex="-1" data-micromodal-close>
+            <div class="_urtaav-modal__container" role="dialog" aria-modal="true" aria-labelledby="modal-1-title">
+                <div class="_urtaav-modal__header">
+                    <div class="_urtaav-modal-header-close">
+                        <button class="_urtaav-modal__close" aria-label="Close modal" data-micromodal-close></button>
+                    </div>
+                    <div class="title">
+                        <h2 class="_urtaav-modal__title" id="modal-1-title">
+                            Responsive meta tag
+                        </h2>
+                    </div>
+                </div>
+                <div class="_urtaav-modal__content" id="modal-1-content">
+                    <div class="_flex-row">
+                        <div class="_flex-item">
+                            <img src="img/7.jpg" alt="" class="flex-img">
+                        </div>
+                        <div class="_flex-item">
+                            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius, consequuntur? Architecto
+                                tempora dolores repellendus consectetur facilis nulla optio impedit dicta, nesciunt
+                                soluta fugiat pariatur deserunt odit, hic omnis, at iusto?</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="_urtaav-modal__footer">
+                    <button class="_urtaav-modal__btn _urtaav-modal__btn-primary">Continue</button>
+                    <button class="_urtaav-modal__btn" data-micromodal-close
+                        aria-label="Close this dialog window">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <div class="top-avisos " id="top-avisos">
+            <div class="flex-row">
+                <div class="flex-item">
+                    <span>Lorem ipsum dolor sit.</span>
+                </div>
+
+                <div class="flex-item">
+                    <span>Nuevo aviso<a href="#">ver</a></span>
+                    <span class="close-top-avisos" onclick="closeTopNavAvisos()">x<span>
+                </div>
+            </div>
+        </div>
+        <div class="f-navbar">
+            <h2><span class="brand-logo">E-app</span> <label for="menu-toggle"><span class="ti-menu"></span></label>
+            </h2>
+
+
+            <input type="checkbox" id="menu-toggle" />
+            <div class="main-menu">
+                <div class="menu-responsive">
+                    <label for="menu-toggle">Close</label>
+                    <form action="" class="search">
+                        <input type="search" placeholder="search store" />
+                        <button><span class="span ti-search"></span></button>
+                    </form>
+                </div>
+
+
+                <a href="" class="">Download app</a>
+
+                <a href="">Sign up / Login</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="carousel" data-flickity='{ "wrapAround": true }'>
+        <div class="carousel-item">
+            <div class="carousel-info">
+                <h1>Surface Tablet</h1>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry's standard dummy text ever since the 1500s,</p>
+                <a href="">Shop now</a>
+            </div>
+            <div class="carousel-image">
+                <img src="img/banner1.jpg" alt="" />
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-info">
+                <h1>HP Desktop PC</h1>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry's standard dummy text ever since the 1500s,</p>
+                <a href="">Shop now</a>
+            </div>
+            <div class="carousel-image">
+                <img src="img/banner0.png" alt="" />
+            </div>
+        </div>
+        <div class="carousel-item">
+            <div class="carousel-info">
+                <h1>Logitech Mouse</h1>
+                <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+                    industry's standard dummy text ever since the 1500s,</p>
+                <a href="">Shop now</a>
+            </div>
+            <div class="carousel-image">
+                <img src="img/banner3.png" alt="" />
+            </div>
+        </div>
+    </div>
+
+    <div class="popular">
+        <h2>Popular Products</h2>
+        <div class="popular-carousel"
+            data-flickity='{ "autoPlay": true, "prevNextButtons": false, "wrapAround": true }'>
+            <div class="single-item">
+                <div class="img" style="background-image: url('img/1.jpg');"></div>
+                <div class="info">
+                    <h3>Tablet PC</h3>
+                    <p>This is a description for the item</p>
+
+                    <div class="item-flex">
+                        <div class="rating">
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                        </div>
+
+                        <div class="price">
+                            <h4>$650.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-item">
+                <div class="img" style="background-image: url('img/prod1.jpeg');"></div>
+                <div class="info">
+                    <h3>Tablet PC</h3>
+                    <p>This is a description for the item</p>
+
+                    <div class="item-flex">
+                        <div class="rating">
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                        </div>
+
+                        <div class="price">
+                            <h4>$650.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-item">
+                <div class="img" style="background-image: url('img/4.jpg');"></div>
+                <div class="info">
+                    <h3>Tablet PC</h3>
+                    <p>This is a description for the item</p>
+
+                    <div class="item-flex">
+                        <div class="rating">
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                        </div>
+
+                        <div class="price">
+                            <h4>$650.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-item">
+                <div class="img" style="background-image: url('img/5.jpg');"></div>
+                <div class="info">
+                    <h3>Tablet PC</h3>
+                    <p>This is a description for the item</p>
+
+                    <div class="item-flex">
+                        <div class="rating">
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                        </div>
+
+                        <div class="price">
+                            <h4>$650.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-item">
+                <div class="img" style="background-image: url('img/prod2.jpg');"></div>
+                <div class="info">
+                    <h3>Tablet PC</h3>
+                    <p>This is a description for the item</p>
+
+                    <div class="item-flex">
+                        <div class="rating">
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                        </div>
+
+                        <div class="price">
+                            <h4>$650.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="popular">
+        <h2>Featured Products</h2>
+        <div class="popular-carousel"
+            data-flickity='{ "autoPlay": true, "prevNextButtons": false, "wrapAround": true }'>
+            <div class="single-item">
+                <div class="img" style="background-image: url('img/prod5.jpg');"></div>
+                <div class="info">
+                    <h3>Tablet PC</h3>
+                    <p>This is a description for the item</p>
+
+                    <div class="item-flex">
+                        <div class="rating">
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                        </div>
+
+                        <div class="price">
+                            <h4>$650.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-item">
+                <div class="img" style="background-image: url('img/prod6.jpg');"></div>
+                <div class="info">
+                    <h3>Tablet PC</h3>
+                    <p>This is a description for the item</p>
+
+                    <div class="item-flex">
+                        <div class="rating">
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                        </div>
+
+                        <div class="price">
+                            <h4>$650.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-item">
+                <div class="img" style="background-image: url('img/4.jpg');"></div>
+                <div class="info">
+                    <h3>Tablet PC</h3>
+                    <p>This is a description for the item</p>
+
+                    <div class="item-flex">
+                        <div class="rating">
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                        </div>
+
+                        <div class="price">
+                            <h4>$650.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-item">
+                <div class="img" style="background-image: url('img/5.jpg');"></div>
+                <div class="info">
+                    <h3>Tablet PC</h3>
+                    <p>This is a description for the item</p>
+
+                    <div class="item-flex">
+                        <div class="rating">
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                        </div>
+
+                        <div class="price">
+                            <h4>$650.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="single-item">
+                <div class="img" style="background-image: url('img/prod2.jpg');"></div>
+                <div class="info">
+                    <h3>Tablet PC</h3>
+                    <p>This is a description for the item</p>
+
+                    <div class="item-flex">
+                        <div class="rating">
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                            <span class="ti-star"></span>
+                        </div>
+
+                        <div class="price">
+                            <h4>$650.00</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="deals">
+        <div class="deals-inner">
+            <div class="timer">
+                <h1>Deals of the day</h1>
+                <h3 class="values">0.00</h3>
+            </div>
+            <div class="deals-carousel" data-flickity='{ "autoPlay": true,"wrapAround": true, "pageDots": false }'>
+                <div class="single-item">
+                    <div class="img" style="background-image: url('img/prod2.jpg');"></div>
+                    <div class="info">
+                        <h3>Tablet PC</h3>
+                        <p>This is a description for the item</p>
+
+                        <div class="item-flex">
+                            <div class="rating">
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                            </div>
+
+                            <div class="price">
+                                <h4>$650.00</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-item">
+                    <div class="img" style="background-image: url('img/prod2.jpg');"></div>
+                    <div class="info">
+                        <h3>Tablet PC</h3>
+                        <p>This is a description for the item</p>
+
+                        <div class="item-flex">
+                            <div class="rating">
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                            </div>
+
+                            <div class="price">
+                                <h4>$650.00</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-item">
+                    <div class="img" style="background-image: url('img/prod2.jpg');"></div>
+                    <div class="info">
+                        <h3>Tablet PC</h3>
+                        <p>This is a description for the item</p>
+
+                        <div class="item-flex">
+                            <div class="rating">
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                            </div>
+
+                            <div class="price">
+                                <h4>$650.00</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="single-item">
+                    <div class="img" style="background-image: url('img/prod2.jpg');"></div>
+                    <div class="info">
+                        <h3>Tablet PC</h3>
+                        <p>This is a description for the item</p>
+
+                        <div class="item-flex">
+                            <div class="rating">
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                                <span class="ti-star"></span>
+                            </div>
+
+                            <div class="price">
+                                <h4>$650.00</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card-brand">
+        <div class="single-card" style="background-image: url('img/7.jpg');"></div>
+        <div class="single-card" style="background-image: url('img/8.jpg');"></div>
+        <div class="single-card" style="background-image: url('img/9.jpg');"></div>
+    </div>
+
+    <footer>
+        <div class="brand">
+            <button onclick="openModal()" class="openModal">Shopee</button>
+            <p>Lorem ipsum is a placeholder text for stuff like this</p>
+        </div>
+        <div class="footer-menu">
+            <div class="menu-card">
+                <h3>Quick Links</h3>
+                <a href="">Home</a>
+                <a href="">Services</a>
+                <a href="">About</a>
+                <a href="">Contact</a>
+            </div>
+            <div class="menu-card">
+                <h3>Quick Links</h3>
+                <a href="">Home</a>
+                <a href="">Services</a>
+                <a href="">About</a>
+                <a href="">Contact</a>
+            </div>
+            <div class="menu-card">
+                <h3>Quick Links</h3>
+                <a href="">Home</a>
+                <a href="">Services</a>
+                <a href="">About</a>
+                <a href="">Contact</a>
+            </div>
+            <div class="menu-card">
+                <h3>Quick Links</h3>
+                <a href="">Home</a>
+                <a href="">Services</a>
+                <a href="">About</a>
+                <a href="">Contact</a>
+            </div>
+        </div>
+    </footer>
+
+    <section class="blog-pop">
+        <div class="blog-pop-bg"></div>
+        <div class="blog-pop-box">
+            <i class="iconfont icon_menu_close close-pop">x</i>
+            <h4>Design Faster. Collaborate Better.</h4>
+            <p class="title-p">Designing the best user experience. Mockplus does it all!</p>
+            <div class="fea">
+                <img src="img/blog-pop1.png" alt="">
+                <p>Interactive prototyping</p>
+            </div>
+            <div class="fea">
+                <img src="img/blog-pop2.png" alt="">
+                <p>Painless collaboration</p>
+            </div>
+            <div class="fea">
+                <img src="img/blog-pop3.png" alt="">
+                <p>Scalable design systems</p>
+            </div>
+            <a href="/start?hrms=popupbanner" class="banner-btn">Get Started for Free</a>
+        </div>
+    </section>
+
+
+
+
+    <!-- JavaScript -->
+    <script src="https://unpkg.com/flickity@2/dist/flickity.pkgd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/easytimer@1.1.1/src/easytimer.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const topAvisos = document.getElementById('top-avisos');
+            setTimeout(function () {
+
+                topAvisos.classList.toggle("show-top-avisos");
+                topAvisos.classList.toggle("slideDown");
+            }, 3000);
+
+
+            closeModal('[data-micromodal-close]');
+        });
+
+        window.addEventListener("load", function (event) {
+            console.log("'Todos los recursos terminaron de cargar (load)!");
+            openModal('.showModal');
+        });
+
+        var timer = new Timer();
+        timer.start({ countdown: true, startValues: { seconds: 1000 } });
+        document.querySelector('.values').innerHTML = timer.getTimeValues().toString();
+        timer.addEventListener('secondsUpdated', function (e) {
+            document.querySelector('.values').innerHTML = timer.getTimeValues().toString();
+        });
+
+
+        const closeTopNavAvisos = () => {
+            console.log("ejecuta funcioon")
+            const topAvisos = document.getElementById('top-avisos');
+            topAvisos.classList.toggle("show-top-avisos");
+            topAvisos.classList.toggle("slideDown");
+        }
+
+        function toggleModal(idModal) {
+            const modalAviso = document.getElementById(idModal);
+            modalAviso.classList.toggle("is-open");
+
+            document.querySelector("body").classList.toggle("_urtaav-modal-active");
+        }
+        const openModal = () => {
+            toggleModal('modal-1');
+            document.getElementById('modal-1').setAttribute('aria-hidden', 'false');
+        }
+
+        const closeModal = (attrBtnsClose) => {
+            const d = document;
+            const closeSelectors = d.querySelectorAll(attrBtnsClose);
+
+            closeSelectors.forEach((el) => {
+                console.log("el", el)
+                el.addEventListener('click', (e) => {
+                    console.log("e", e)
+                    if (e.target.matches) {
+                        toggleModal('modal-1');
+                        document.getElementById('modal-1').setAttribute('aria-hidden', 'true');
+                    }
+                })
+            })
+
+        }
+
+    </script>
+</body>
+
+</html>
